@@ -150,3 +150,74 @@ Once it has restarted, launch docker compose again. Then, verify that everything
 The changes you made previously to the WordPress website should still be here.[] If any of the above points is not correct, the evaluation process ends now. </br>
 
 *Yes* No
+
+# Português
+
+**Inception_42sp**  
+*Testes preliminares*  
+Qualquer credencial, chaves de API, variáveis de ambiente devem ser definidas dentro de um arquivo .env durante a avaliação.  
+Para este projeto, você deve clonar o repositório Git na sua estação.
+
+**Instruções gerais**  
+- Garanta que todos os arquivos necessários para configurar o aplicativo estejam localizados dentro de uma pasta chamada srcs. A pasta srcs deve estar localizada na raiz do repositório.
+- Garanta que um Makefile esteja localizado na raiz do repositório.
+- Antes de iniciar a avaliação, execute este comando no terminal: [comando docker].
+- Leia o arquivo docker-compose.yml. Ele não deve conter 'network: host' ou 'links:'. Caso contrário, a avaliação termina agora.
+- Leia o arquivo docker-compose.yml. Ele deve conter *'network(s)'*. Caso contrário, a avaliação termina agora.
+- Examine o Makefile e todos os scripts nos quais o Docker é usado. Não deve haver '--link' em nenhum deles. Caso contrário, a avaliação termina agora.
+- Examine os Dockerfiles. Se você vir 'tail -f' ou qualquer comando executado em segundo plano em qualquer um deles na seção ENTRYPOINT, a avaliação termina agora. O mesmo vale se 'bash' ou 'sh' são usados, mas não para executar um script.
+- Se o entrypoint for um script (por exemplo, ENTRYPOINT ["sh", "my_entrypoint.sh"], ENTRYPOINT ["bash", "my_entrypoint.sh"]), garanta que ele não execute nenhum programa em segundo plano.
+- Examine todos os scripts no repositório. Garanta que nenhum deles execute um loop infinito.
+- Execute o Makefile.
+
+**Parte Obrigatória**  
+Este projeto consiste em configurar uma pequena infraestrutura composta por diferentes serviços usando docker compose. Garanta que todos os seguintes pontos estejam corretos.
+
+**Visão geral do projeto**  
+O avaliado deve explicar em termos simples:
+- Como o Docker e docker compose funcionam.
+- A diferença entre uma imagem Docker usada com e sem docker compose.
+- A diferença entre uma imagem Docker e um contêiner Docker.
+- A vantagem do Docker em comparação com VMs.
+- A pertinência da estrutura de diretório exigida para este projeto.
+
+**Configuração Simples**  
+- Garanta que o NGINX possa ser acessado apenas pela porta 443.
+- Garanta que um certificado SSL/TLS esteja sendo usado.
+- Garanta que o site WordPress esteja instalado e configurado corretamente.
+
+**Básicos do Docker**  
+- Comece verificando os Dockerfiles.
+- Garanta que o aluno tenha escrito seus próprios Dockerfiles e construído suas próprias imagens Docker.
+- Garanta que cada contêiner seja construído a partir da penúltima versão estável do Alpine/Debian.
+- As imagens Docker devem ter o mesmo nome que seus serviços correspondentes.
+- Garanta que o Makefile tenha configurado todos os serviços via docker compose.
+
+**Rede Docker**  
+- Garanta que a rede docker esteja sendo usada.
+- O aluno avaliado deve lhe dar uma explicação simples da rede docker.
+
+**NGINX com SSL/TLS**  
+- Garanta que haja um Dockerfile.
+- Tente acessar o serviço via http.
+- Abra [link] no navegador.
+- O uso de um certificado TLS v1.2/v1.3 é obrigatório.
+
+**WordPress com php-fpm e seu volume**  
+- Garanta que haja um Dockerfile.
+- Garanta que o NGINX não esteja no Dockerfile.
+- Garanta que haja um Volume.
+- Garanta que você possa adicionar um comentário usando o usuário WordPress disponível.
+- Faça login com a conta de administrador para acessar o painel de controle do administrador.
+- Edite uma página a partir do painel de controle do administrador.
+
+**MariaDB e seu volume**  
+- Garanta que haja um Dockerfile.
+- Garanta que o NGINX não esteja no Dockerfile.
+- Garanta que haja um Volume.
+- O aluno avaliado deve ser capaz de explicar como fazer login no banco de dados.
+
+**Persistência!**  
+- Você deve reiniciar a máquina virtual.
+- Uma vez reiniciada, inicie o docker compose novamente.
+- Verifique se tudo está funcionando e que WordPress e MariaDB estão configurados.
