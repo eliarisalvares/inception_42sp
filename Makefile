@@ -1,55 +1,77 @@
-all: setup up
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: elraira- <elraira-@student.42.fr>          +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2023/10/10 03:49:33 by elraira-          #+#    #+#              #
+#    Updated: 2023/10/10 03:49:46 by elraira-         ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
+# Define colors
+RED=\033[0;31m
+GREEN=\033[0;32m
+NC=\033[0m #
+
+DATA_PATH=/home/elraira-
+DOCKER_COMPOSE_CMD=sudo docker-compose -f ./srcs/docker-compose.yml
+
+all: setup launch
 
 setup:
-	@sudo echo "Setting hosts..."
+	@echo "${GREEN}Initializing hosts...${NC}"
 	@sudo chmod a+w /etc/hosts
 	@sudo cat /etc/hosts | grep elraira-.42.fr || echo "127.0.0.1 elraira-.42.fr" >> /etc/hosts
-	@sudo mkdir -p /home/elraira-/data/wp-pages
-	@sudo mkdir -p /home/elraira-/data/wp-database
+	@sudo mkdir -p $(DATA_PATH)/data/wp-pages
+	@sudo mkdir -p $(DATA_PATH)/data/wp-database
 
-up:
-	sudo docker-compose -f ./srcs/docker-compose.yml up -d
+launch:
+	$(DOCKER_COMPOSE_CMD) up -d
 
-nginx:
-	sudo mkdir -p /home/elraira-/data/wp-pages
-	sudo docker-compose -f ./srcs/docker-compose.yml up -d nginx 
+start-nginx:
+	sudo mkdir -p $(DATA_PATH)/data/wp-pages
+	$(DOCKER_COMPOSE_CMD) up -d nginx 
 
-build-nginx:
-	sudo docker-compose -f ./srcs/docker-compose.yml up -d --build --force-recreate nginx
+rebuild-nginx:
+	$(DOCKER_COMPOSE_CMD) up -d --build --force-recreate nginx
 
-down-nginx:
-	sudo docker-compose -f ./srcs/docker-compose.yml down nginx
+stop-nginx:
+	$(DOCKER_COMPOSE_CMD) down nginx
 
-mariadb:
-	sudo mkdir -p /home/elraira-/data/wp-database
-	sudo docker-compose -f ./srcs/docker-compose.yml up -d mariadb 
+start-mariadb:
+	sudo mkdir -p $(DATA_PATH)/data/wp-database
+	$(DOCKER_COMPOSE_CMD) up -d mariadb 
 
-build-mariadb:
-	sudo docker-compose -f ./srcs/docker-compose.yml up -d --build --force-recreate mariadb
+rebuild-mariadb:
+	$(DOCKER_COMPOSE_CMD) up -d --build --force-recreate mariadb
 
-down-mariadb:
-	sudo docker-compose -f ./srcs/docker-compose.yml down mariadb
+stop-mariadb:
+	$(DOCKER_COMPOSE_CMD) down mariadb
 
-wordpress:
-	sudo mkdir -p /home/elraira-/data/wp-pages
-	sudo docker-compose -f ./srcs/docker-compose.yml up -d wordpress 
+start-wordpress:
+	sudo mkdir -p $(DATA_PATH)/data/wp-pages
+	$(DOCKER_COMPOSE_CMD) up -d wordpress 
 
-build-wordpress:
-	sudo docker-compose -f ./srcs/docker-compose.yml up -d --build --force-recreate wordpress
+rebuild-wordpress:
+	$(DOCKER_COMPOSE_CMD) up -d --build --force-recreate wordpress
 
-down-wordpress:
-	sudo docker-compose -f ./srcs/docker-compose.yml down wordpress
+stop-wordpress:
+	$(DOCKER_COMPOSE_CMD) down wordpress
 
-down:
-	sudo docker-compose -f ./srcs/docker-compose.yml down
+shutdown:
+	$(DOCKER_COMPOSE_CMD) down
 
-clean:
-	@sudo rm -rf /home/elraira-
-	@sudo docker-compose -f ./srcs/docker-compose.yml down -v --rmi all --remove-orphans
+purge:
+	@echo "${RED}Purging data and containers...${NC}"
+	@sudo rm -rf $(DATA_PATH)
+	@$(DOCKER_COMPOSE_CMD) down -v --rmi all --remove-orphans
 
-fclean: clean
+full-purge: purge
+	@echo "${RED}Performing complete system cleanup...${NC}"
 	@sudo docker system prune --volumes --all --force
 
-re: fclean all
+restart: full-purge initialize
 
-.PHONY: all
+.PHONY: initialize
