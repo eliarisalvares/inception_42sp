@@ -159,65 +159,98 @@ Qualquer credencial, chaves de API, variáveis de ambiente devem ser definidas d
 Para este projeto, você deve clonar o repositório Git na sua estação.
 
 **Instruções gerais**  
-- Garanta que todos os arquivos necessários para configurar o aplicativo estejam localizados dentro de uma pasta chamada srcs. A pasta srcs deve estar localizada na raiz do repositório.
-- Garanta que um Makefile esteja localizado na raiz do repositório.
-- Antes de iniciar a avaliação, execute este comando no terminal: [comando docker].
-- Leia o arquivo docker-compose.yml. Ele não deve conter 'network: host' ou 'links:'. Caso contrário, a avaliação termina agora.
-- Leia o arquivo docker-compose.yml. Ele deve conter *'network(s)'*. Caso contrário, a avaliação termina agora.
-- Examine o Makefile e todos os scripts nos quais o Docker é usado. Não deve haver '--link' em nenhum deles. Caso contrário, a avaliação termina agora.
-- Examine os Dockerfiles. Se você vir 'tail -f' ou qualquer comando executado em segundo plano em qualquer um deles na seção ENTRYPOINT, a avaliação termina agora. O mesmo vale se 'bash' ou 'sh' são usados, mas não para executar um script.
-- Se o entrypoint for um script (por exemplo, ENTRYPOINT ["sh", "my_entrypoint.sh"], ENTRYPOINT ["bash", "my_entrypoint.sh"]), garanta que ele não execute nenhum programa em segundo plano.
-- Examine todos os scripts no repositório. Garanta que nenhum deles execute um loop infinito.
-- Execute o Makefile.
+- [ ] Garanta que todos os arquivos necessários para configurar o aplicativo estejam localizados dentro de uma pasta chamada srcs. A pasta srcs deve estar localizada na raiz do repositório.
+- [ ] Garanta que um Makefile esteja localizado na raiz do repositório.
+- [ ] Antes de iniciar a avaliação, execute este comando no terminal:
+```
+docker stop $(docker ps -qa); docker rm $(docker ps -qa); docker rmi -f $(docker images -qa); docker volume rm $(docker volume ls -q); docker network rm $(docker network ls -q) 2>/dev/null
+```
+- [ ] Leia o arquivo docker-compose.yml. Ele não deve conter 'network: host' ou 'links:'. Caso contrário, a avaliação termina agora.
+- [ ] Leia o arquivo docker-compose.yml. Ele deve conter *'network(s)'*. Caso contrário, a avaliação termina agora.
+- [ ] Examine o Makefile e todos os scripts nos quais o Docker é usado. Não deve haver '--link' em nenhum deles. Caso contrário, a avaliação termina agora.
+- [ ] Examine os Dockerfiles. Se você vir 'tail -f' ou qualquer comando executado em segundo plano em qualquer um deles na seção ENTRYPOINT, a avaliação termina agora. O mesmo vale se 'bash' ou 'sh' são usados, mas não para executar um script.
+- [ ] Se o entrypoint for um script (por exemplo, ENTRYPOINT ["sh", "my_entrypoint.sh"], ENTRYPOINT ["bash", "my_entrypoint.sh"]), garanta que ele não execute nenhum programa em segundo plano.
+- [ ] Examine todos os scripts no repositório. Garanta que nenhum deles execute um loop infinito.
+- [ ] Execute o Makefile.
 
 **Parte Obrigatória**  
 Este projeto consiste em configurar uma pequena infraestrutura composta por diferentes serviços usando docker compose. Garanta que todos os seguintes pontos estejam corretos.
 
 **Visão geral do projeto**  
 O avaliado deve explicar em termos simples:
-- Como o Docker e docker compose funcionam.
-- A diferença entre uma imagem Docker usada com e sem docker compose.
-- A diferença entre uma imagem Docker e um contêiner Docker.
-- A vantagem do Docker em comparação com VMs.
-- A pertinência da estrutura de diretório exigida para este projeto.
+- [ ] Como o Docker e docker compose funcionam.
+
+R: O Docker é uma ferramenta projetada para facilitar a criação, implantação e execução de aplicativos usando contêineres. Os contêineres permitem que um desenvolvedor empacote um aplicativo com todas as partes necessárias, como bibliotecas e outras dependências, e envie tudo como um pacote. O docker compose é uma ferramenta para definir e executar aplicativos Docker de vários contêineres. Com o Compose, você usa um arquivo YAML para configurar os serviços do seu aplicativo. Em seguida, com um único comando, você cria e inicia todos os serviços a partir da sua configuração.
+
+- [ ] A diferença entre uma imagem Docker usada com e sem docker compose.
+
+R: O docker compose é uma ferramenta para definir e executar aplicativos Docker de vários contêineres. Com o Compose, você usa um arquivo YAML para configurar os serviços do seu aplicativo. Em seguida, com um único comando, você cria e inicia todos os serviços a partir da sua configuração. Sem o docker compose, você tem que executar cada contêiner individualmente.
+
+- [ ] A diferença entre uma imagem Docker e um contêiner Docker.
+
+R: Uma imagem Docker é um arquivo, composto por várias camadas, que é usado para executar código em um contêiner Docker. Uma imagem é essencialmente construída a partir das instruções para uma versão completa e executável de um aplicativo, que depende do kernel do sistema operacional host. Um contêiner Docker é uma instância de tempo de execução de uma imagem Docker.
+
+- [ ] A vantagem do Docker em comparação com VMs.
+
+R: Os contêineres do Docker são mais leves que as máquinas virtuais. Eles são processos isolados e não requerem nenhum hipervisor para serem executados. Os contêineres também são portáteis, o que significa que podem ser movidos entre ambientes. Os contêineres do Docker também são mais fáceis de gerenciar do que as VMs porque podem ser controlados a partir de uma única linha de comando.
+
+- [ ] A pertinência da estrutura de diretório exigida para este projeto.
+
+R: A estrutura de diretório é necessária para tornar o projeto mais fácil de entender e para facilitar a localização dos arquivos e serviços diferentes que serão executados juntos.
 
 **Configuração Simples**  
-- Garanta que o NGINX possa ser acessado apenas pela porta 443.
-- Garanta que um certificado SSL/TLS esteja sendo usado.
-- Garanta que o site WordPress esteja instalado e configurado corretamente.
+- [ ] Garanta que o NGINX possa ser acessado apenas pela porta 443.
+
+R: Para verificar se o NGINX pode ser acessado apenas pela porta 443, você pode executar o comando 'docker-compose ps' e verificar a coluna PORTS. Também é possível executar o comando 'docker-compose exec nginx sh' e, em seguida, 'netstat -tulpn | grep LISTEN' ou tentar acessar o serviço via https://localhost:443 e não https://localhost:80.
+
+- [ ] Garanta que um certificado SSL/TLS esteja sendo usado.
+
+R: Para verificar se um certificado SSL/TLS está sendo usado, você pode executar o comando 'docker-compose exec nginx sh' e, em seguida, executar 'openssl x509 -text -noout -in /etc/nginx/certificate.pem'.
+
+- [ ] Garanta que o site WordPress esteja instalado e configurado corretamente.
+
+R: Para verificar se o site WordPress está instalado e configurado corretamente, você pode abrir https://login.42.fr no seu navegador, onde login é o login do aluno avaliado. Você não deve conseguir acessar o site via http://login.42.fr.
 
 **Básicos do Docker**  
-- Comece verificando os Dockerfiles.
-- Garanta que o aluno tenha escrito seus próprios Dockerfiles e construído suas próprias imagens Docker.
-- Garanta que cada contêiner seja construído a partir da penúltima versão estável do Alpine/Debian.
-- As imagens Docker devem ter o mesmo nome que seus serviços correspondentes.
-- Garanta que o Makefile tenha configurado todos os serviços via docker compose.
+- [ ] Comece verificando os Dockerfiles.
+- [ ] Garanta que o aluno tenha escrito seus próprios Dockerfiles e construído suas próprias imagens Docker.
+- [ ] Garanta que cada contêiner seja construído a partir da penúltima versão estável do Alpine/Debian.
+- [ ] As imagens Docker devem ter o mesmo nome que seus serviços correspondentes.
+- [ ] Garanta que o Makefile tenha configurado todos os serviços via docker compose.
 
 **Rede Docker**  
-- Garanta que a rede docker esteja sendo usada.
-- O aluno avaliado deve lhe dar uma explicação simples da rede docker.
+- [ ] Garanta que a rede docker esteja sendo usada.
+
+R: Para verificar se a rede docker está sendo usada, você pode executar o comando 'docker-compose ps' e verificar a coluna NETWORKS. Você também pode executar o comando 'docker network ls' e verificar se uma rede está visível.
+
+- [ ] O aluno avaliado deve lhe dar uma explicação simples da rede docker.
+
+R: A rede docker é um comando que permite gerenciar redes. É usado para criar, excluir e gerenciar redes. Ele também permite conectar um contêiner a uma rede, desconectar um contêiner de uma rede e inspecionar redes. Uma rede é um grupo de contêineres que podem se comunicar entre si por meio de uma rede privada. A rede docker é usada para criar uma rede e conectar contêineres a ela.
 
 **NGINX com SSL/TLS**  
-- Garanta que haja um Dockerfile.
-- Tente acessar o serviço via http.
-- Abra [link] no navegador.
-- O uso de um certificado TLS v1.2/v1.3 é obrigatório.
+- [ ] Garanta que haja um Dockerfile.
+- [ ] Tente acessar o serviço via http.
+- [ ] Abra [link] no navegador.
+- [ ] O uso de um certificado TLS v1.2/v1.3 é obrigatório.
+
+<b> Para verificar se o certificado TLS v1.2/v1.3 está sendo usado, você pode executar o comando 'docker-compose exec nginx sh' e, em seguida, executar 'openssl x509 -text -noout -in /etc/nginx/certificate.pem'.
 
 **WordPress com php-fpm e seu volume**  
-- Garanta que haja um Dockerfile.
-- Garanta que o NGINX não esteja no Dockerfile.
-- Garanta que haja um Volume.
-- Garanta que você possa adicionar um comentário usando o usuário WordPress disponível.
-- Faça login com a conta de administrador para acessar o painel de controle do administrador.
-- Edite uma página a partir do painel de controle do administrador.
+- [ ] Garanta que haja um Dockerfile.
+- [ ] Garanta que o NGINX não esteja no Dockerfile.
+- [ ] Garanta que haja um Volume.
+- [ ] Garanta que você possa adicionar um comentário usando o usuário WordPress disponível.
+- [ ] Faça login com a conta de administrador para acessar o painel de controle do administrador.
+- [ ] Edite uma página a partir do painel de controle do administrador.
 
 **MariaDB e seu volume**  
-- Garanta que haja um Dockerfile.
-- Garanta que o NGINX não esteja no Dockerfile.
-- Garanta que haja um Volume.
-- O aluno avaliado deve ser capaz de explicar como fazer login no banco de dados.
+- [ ] Garanta que haja um Dockerfile.
+- [ ] Garanta que o NGINX não esteja no Dockerfile.
+- [ ] Garanta que haja um Volume.
+- [ ] O aluno avaliado deve ser capaz de explicar como fazer login no banco de dados.
+R: Para fazer login no banco de dados, você pode executar o comando 'docker-compose exec mariadb sh' e, em seguida, 'mysql -u root -p'. A senha é 'password'. Para verificar se o banco de dados não está vazio, você pode executar o comando 'show databases;' e, em seguida, 'use wordpress;'. Em seguida, você pode executar o comando 'show tables;' e, em seguida, 'select * from wp_users;'.
 
 **Persistência!**  
-- Você deve reiniciar a máquina virtual.
-- Uma vez reiniciada, inicie o docker compose novamente.
-- Verifique se tudo está funcionando e que WordPress e MariaDB estão configurados.
+- [ ] Você deve reiniciar a máquina virtual.
+- [ ] Uma vez reiniciada, inicie o docker compose novamente.
+- [ ] Verifique se tudo está funcionando e que WordPress e MariaDB estão configurados.
