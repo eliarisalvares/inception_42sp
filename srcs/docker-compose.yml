@@ -40,7 +40,7 @@ services:
         - WP_ADMIN_EMAIL
         - WP_USER
         - WP_PASSWORD
-        - WP_USER_EMAIL
+        - WP_EMAIL
     env_file:
       - .env
     container_name: wordpress
